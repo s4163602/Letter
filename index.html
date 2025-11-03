@@ -29,6 +29,8 @@
       z-index:0;
       box-shadow:0 8px 20px rgba(0,0,0,0.15);
       border-radius:8px;
+      cursor:pointer;
+      transition:transform 0.3s ease;
     }
 
     .lid {
@@ -44,8 +46,8 @@
       transition:transform 0.25s linear;
     }
 
-    .lid.one {border-top:100px solid #f8bcd3;transform:rotateX(0deg);z-index:3;transition-delay:0.75s;}
-    .lid.two {border-top:100px solid #f4a8c4;transform:rotateX(90deg);z-index:1;transition-delay:0.5s;}
+    .lid.one {border-top:100px solid #f8bcd3;z-index:3;transition-delay:0.75s;}
+    .lid.two {border-top:100px solid #f4a8c4;z-index:1;transition-delay:0.5s;}
 
     .envelope {
       position:absolute;
@@ -88,7 +90,6 @@
       z-index:1;
       transition:0.5s;
       box-shadow:0 4px 10px rgba(0,0,0,0.1);
-      cursor:pointer;
     }
 
     .letter p {
@@ -99,9 +100,9 @@
       color:#f27da6;
     }
 
-    .wrapper:hover .lid.one {transform:rotateX(90deg);transition-delay:0s;}
-    .wrapper:hover .lid.two {transform:rotateX(180deg);transition-delay:0.25s;}
-    .wrapper:hover .letter {transform:translateY(-50px);transition-delay:0.5s;}
+    .open .lid.one {transform:rotateX(90deg);transition-delay:0s;}
+    .open .lid.two {transform:rotateX(180deg);transition-delay:0.25s;}
+    .open .letter {transform:translateY(-50px);transition-delay:0.5s;}
 
     .popup-overlay {
       position:fixed;
@@ -162,7 +163,6 @@
 
     .close-x:hover {color:#d56a91;}
 
-    /* kitten stickers */
     .kitten-top-left, .kitten-bottom-right {
       position:absolute;
       width:50px;
@@ -177,14 +177,14 @@
   </style>
 </head>
 <body>
-  <div class="wrapper">
+  <div class="wrapper" id="envelope">
     <div class="lid one"></div>
     <div class="lid two"></div>
     <div class="envelope"></div>
     <div class="seal">
       <img src="kitten-paw.png" alt="Kitten Paw Seal">
     </div>
-    <div class="letter" id="letter">
+    <div class="letter">
       <p>Gửi Cá iuuu</p>
     </div>
   </div>
@@ -200,25 +200,32 @@
   </div>
 
   <script>
-    const letter=document.getElementById('letter');
-    const popup=document.getElementById('popup');
-    const popupContent=document.getElementById('popupContent');
-    const closePopup=document.getElementById('closePopup');
+    const envelope = document.getElementById('envelope');
+    const popup = document.getElementById('popup');
+    const popupContent = document.getElementById('popupContent');
+    const closePopup = document.getElementById('closePopup');
 
-    letter.onclick=()=>{
-      popup.style.display='flex';
-      setTimeout(()=>popupContent.classList.add('show'),10);
-    };
+    envelope.addEventListener('click', () => {
+      envelope.classList.toggle('open');
+      if (envelope.classList.contains('open')) {
+        setTimeout(() => {
+          popup.style.display = 'flex';
+          setTimeout(() => popupContent.classList.add('show'), 10);
+        }, 900);
+      }
+    });
 
-    closePopup.onclick=()=>{
+    closePopup.onclick = () => {
       popupContent.classList.remove('show');
-      setTimeout(()=>popup.style.display='none',300);
+      setTimeout(() => popup.style.display = 'none', 300);
+      envelope.classList.remove('open');
     };
 
-    popup.onclick=e=>{
-      if(e.target===popup){
+    popup.onclick = e => {
+      if (e.target === popup) {
         popupContent.classList.remove('show');
-        setTimeout(()=>popup.style.display='none',300);
+        setTimeout(() => popup.style.display = 'none', 300);
+        envelope.classList.remove('open');
       }
     };
   </script>
